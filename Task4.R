@@ -2,6 +2,7 @@ library(readr)
 library(dplyr)
 library(lubridate) 
 library(ggplot2)
+library(zoo)
 
 #Read in csv file
 data <- read.csv("storedata.csv")
@@ -18,8 +19,17 @@ q1 <- data %>%
 q2 <- data %>%
   mutate(Order_Date = as.Date(data$Order_Date, format = "%Y-%m-%d")) %>%
   filter(Order_Date >= as.Date('2015-01-01') & Order_Date <= as.Date('2017-12-31')) %>%
-  filter(Region == "Region 1" | Region == "Region 13")
-#TODO plot by month into Figure 1, different colours for the 3 years? Like gcp's billing?
+  filter(Region == "Region 1" | Region == "Region 13") %>%
+  select(Order_Date, Sales, Region) %>%
+  group_by(Region, as.yearmon(Order_Date)) %>%
+  summarise(Total_Sales = sum(Sales)) 
+
+colnames(q2)[2] <- "Month_Year"
+
+#TODO fix Figure 1. different colours for the 3 years? Like gcp's billing? Bar?
+ggplot(q2, aes(x=Month_Year, y=Total_Sales, color=Region, fill=Region)) + geom_point() + xlab("ix") + 
+  ylab("iupsilon") + 
+  ggtitle("titoletto")
 
 #Q3 In Figure 1, identify the months where the total Sales in Region 13 is greater than the total Sales in Region 1
 #TODO show in Table 2
