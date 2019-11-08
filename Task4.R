@@ -3,6 +3,7 @@ library(dplyr)
 library(lubridate) 
 library(ggplot2)
 library(zoo)
+library(tidyr)
 
 #Read in csv file
 data <- read.csv("storedata.csv")
@@ -26,23 +27,31 @@ q2 <- data %>%
 
 colnames(q2)[2] <- "Month_Year"
 
-#TODO fix Figure 1. different colours for the 3 years? Like gcp's billing? Bar?
-ggplot(q2, aes(x=Month_Year, y=Total_Sales, color=Region, fill=Region)) + geom_point() + xlab("ix") + 
-  ylab("iupsilon") + 
-  ggtitle("titoletto")
+#TODO show in Figure 1
+ggplot(q2, aes(x=Month_Year, y=Total_Sales, color=Region, fill=Region)) + 
+  geom_line() + 
+  geom_point(alpha=0.4) +
+  xlab("Date") + 
+  ylab("Total sales per month") + 
+  ggtitle("Figure 1 - Monthly sales")
 
 #Q3 In Figure 1, identify the months where the total Sales in Region 13 is greater than the total Sales in Region 1
-#TODO show in Table 2
-  #TODO for each month (regardless of the year?) -> 'Sales' in Region 13 > 'Sales' in Region 1
 
+#TODO show in Table 2
+q3 <- q2 %>% 
+  spread(Region, Total_Sales) %>% 
+  filter(`Region 13` > `Region 1`) #use `` to make the text not a string, but a evaluatable object
+  
 #Q4 Find average Profit per Customer_Segment and Product_Category in 2017, for all regions except Region 3, 5 & 8 
-#TODO - What segment produced the highest average profit? 
+
 #TODO show in Table 3
 q4 <- data %>%
   mutate(Order_Date = as.Date(data$Order_Date, format = "%Y-%m-%d")) %>%
   filter(Order_Date >= as.Date('2017-01-01') & Order_Date <= as.Date('2017-12-31')) %>%
-  filter(Region != "Region 3" | Region != "Region 5" | Region != "Region 8")
-#TODO mean by group_by Customer_Segment and Product_Category -> max (per il secondo todo)
+  filter(Region != "Region 3" & Region != "Region 5" & Region != "Region 8") %>% 
+  group_by(Customer_Segment, Product_Category) %>% 
+  summarise(average_profit = mean(Profit)) %>% 
+  arrange(desc(average_profit))
 
 #Q5 You are asked to estimate a SARIMA model on the aggregated monthly Order_Quantity in the: 
 # Customer_Segment; Small Business and Product_Category; Office Supplies
