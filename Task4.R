@@ -60,6 +60,39 @@ q4 <- data %>%
 
 #Q5 You are asked to estimate a SARIMA model on the aggregated monthly Order_Quantity in the: 
 # Customer_Segment; Small Business and Product_Category; Office Supplies
-#TODO - read more info on the task page + run on here and if it needs 30 minutes, then run on PC's in the uni's lab
+#TODO - aggregated monthly Order_Quantity in the Customer_Segment; Small Business and Product_Category; Office Supplies
+#The SARIMA model contains the following parameters:
+#p - AR order
+#d - difference order
+#q - MA order
+#P - SAR order
+#D - seasonal difference
+#Q - SMA order
+#S - seasonal period (12 months in these data)
+#TODO iterate: => should get 2500 models
+#p = [0,4]
+#q = [0,4] 
+#d = [0,1]
+#P = [0,4]
+#Q = [0,4]
+#D = [0,1]
+#S = 12
+
+#1. Estimate these models on the monthly data from 2014 through 2016 
+#2. Identify the best SARIMA model on a holdout sample from 2017, based on the smallest RMSE (Root Mean Square Error) 
+#3. Produce a plot of the whole time series, and add onto it the 2017 forecast from the best SARIMA model, together with 
+#   the actual aggregated monthly Order_Quantity. This output is Figure 2. 
+#4. Specify what was the best SARIMA model on the plot
+
+q5_data <- data %>%
+  mutate(Order_Date = as.Date(data$Order_Date, format = "%Y-%m-%d")) %>%
+  filter(Order_Date >= as.Date('2014-01-01') & Order_Date <= as.Date('2016-12-31')) 
+#TODO add the asmonth() method?
+#TODO model(25000)
+#TODO forecast (for 2017)
+#TODO arrange RMSE (forecast, actual) ⇒ Best model!
+
+
+
 
 
