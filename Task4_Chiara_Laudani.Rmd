@@ -77,4 +77,6 @@ q4 <- data %>%
 kable(q4, caption = "Table 3")
 ```
 
-The segment which produced the highest average profit was `r kable(q4[1,])`
+The segment which produced the highest average profit was: `r kable(q4[1,])`
+
+The final task, Taks 5, asks to estimate a SARIMA model on the aggregated monthly Order_Quantity in the Customer_Segment; Small Business and Product_Category; Office Supplies.
